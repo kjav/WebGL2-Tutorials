@@ -1,0 +1,11 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+canvas {
+  border: 2px dashed black;
+  display: inline-block;
+  width: 400px;
+  height: 300px;
+}
