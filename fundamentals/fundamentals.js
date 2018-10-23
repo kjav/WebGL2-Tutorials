@@ -1,11 +1,11 @@
-const canvas = document.getElementById("fundamentals_canvas");
+(() => {
+const NAME = "fundamentals";
+const PATH = NAME + "/";
 
-const gl = canvas.getContext("webgl2");
-
-fetch("fundamentals/vs.glsl")
+fetch(PATH + "vs.glsl")
   .then(response => response.text())
   .then(vertexShader => {
-    fetch("fundamentals/fs.glsl")
+    fetch(PATH + "fs.glsl")
     .then(response => response.text())
     .then(fragmentShader => {
       main(vertexShader, fragmentShader);
@@ -13,6 +13,8 @@ fetch("fundamentals/vs.glsl")
   });
 
 function main(vertexShaderSource, fragmentShaderSource) {
+const canvas = document.getElementById(NAME + "_canvas");
+const gl = canvas.getContext("webgl2");
 
 const vertexShader = createShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
 const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
@@ -82,3 +84,4 @@ for (var ii = 0; ii < 50; ii++) {
 }
 
 }
+})()
