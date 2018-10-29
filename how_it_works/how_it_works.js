@@ -1,3 +1,5 @@
+"use strict";
+
 (() => {
 const NAME = "how_it_works";
 const PATH = NAME + "/";
@@ -25,19 +27,8 @@ const program = createProgram(gl, vertexShader, fragmentShader);
 const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-const positions = [
-  10, 20,
-  80, 20,
-  10, 30,
-  10, 30,
-  80, 20,
-  80, 30
-];
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-const resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
-
-const colorUniformLocation = gl.getUniformLocation(program, "u_color");
+const matrixUniformLocation = gl.getUniformLocation(program, "u_matrix");
 
 const vao = gl.createVertexArray();
 gl.bindVertexArray(vao);
@@ -51,38 +42,37 @@ const offset = 0; // Start at the beginning of the buffer
 gl.vertexAttribPointer(
   positionAttributeLocation, size, type, normalize, stride, offset);
 
-resize(gl.canvas);
 
-gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+setGeometry(gl, 0, -100, 150, 125, -175, 100);
 
-// Clear the canvas
-gl.clearColor(0, 0, 0, 0);
-gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+const primitiveType = gl.TRIANGLES;
+var x = 20;
+var y = 15;
+function drawScene() {
+  resize(gl.canvas);
 
-// Bind the attribute/buffer set we want
-gl.bindVertexArray(vao);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-// Tell it to use our program (pair of shaders)
-gl.useProgram(program);
+  // Clear the canvas
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
-for (var ii = 0; ii < 50; ii++) {
-  setRectangle(gl, randomInt(450), randomInt(300), randomInt(450), randomInt(300));
+  // Tell it to use our program (pair of shaders)
+  gl.useProgram(program);
 
-  // Set a random colour
-  gl.uniform4f(
-    colorUniformLocation,
-    Math.random(),
-    Math.random(),
-    Math.random(),
-    0.5
-  );
+  // Bind the attribute/buffer set we want
+  gl.bindVertexArray(vao);
 
-  const primitiveType = gl.TRIANGLES;
-  const offset = 0;
-  const count = 6;
-  gl.drawArrays(primitiveType, offset, count);
+  // Set the view matrix
+  var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
+  matrix = m3.translate(matrix, x, y);
+  matrix = m3.rotate(matrix, 0);
+  matrix = m3.scale(matrix, 1, 1);
+  gl.uniformMatrix3fv(matrixUniformLocation, false, matrix);
+
+  gl.drawArrays(primitiveType, 0, 3);
 }
+drawScene();
 
 }
 })()
