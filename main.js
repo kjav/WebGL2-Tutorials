@@ -100,3 +100,40 @@ function setColors(gl) {
           r(), r(), r(), 1]),
       gl.STATIC_DRAW);
 }
+
+function createAndSetupTexture(gl) {
+  var texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+ 
+  // Set up texture so we can render any size image and so we are
+  // working with pixels.
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+ 
+  return texture;
+}
+
+function setFramebuffer(gl, fbo, width, height, resolutionLocation) {
+  // make this the framebuffer we are rendering to.
+  gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+
+  // Tell the shader the resolution of the framebuffer.
+  gl.uniform2f(resolutionLocation, width, height);
+
+  // Tell WebGL how to convert from clip space to pixels
+  gl.viewport(0, 0, width, height);
+}
+
+function drawWithKernel(gl, kernel, kernelLocation, kernelWeight, kernelWeightLocation) {
+  // set the kernel and it's weight
+  gl.uniform1fv(kernelLocation, kernel);
+  gl.uniform1f(kernelWeightLocation, kernelWeight);
+
+  // Draw the rectangle.
+  var primitiveType = gl.TRIANGLES;
+  var offset = 0;
+  var count = 6;
+  gl.drawArrays(primitiveType, offset, count);
+}
