@@ -25,8 +25,11 @@ const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource
 const program = createProgram(gl, vertexShader, fragmentShader);
 
 const positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+const colorAttributeLocation = gl.getAttribLocation(program, "a_color");
 const positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+setRectangle(gl, -150, -100, 300, 200);
 
 const matrixUniformLocation = gl.getUniformLocation(program, "u_matrix");
 
@@ -42,12 +45,21 @@ const offset = 0; // Start at the beginning of the buffer
 gl.vertexAttribPointer(
   positionAttributeLocation, size, type, normalize, stride, offset);
 
+const colorBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
 
-setGeometry(gl, 0, -100, 150, 125, -175, 100);
+setColors(gl);
+
+// Set up colour attribute
+gl.enableVertexAttribArray(colorAttributeLocation);
+gl.vertexAttribPointer(colorAttributeLocation, 4, gl.FLOAT, false, 0, 0);
 
 const primitiveType = gl.TRIANGLES;
 var x = 20;
 var y = 15;
+var rotation = 0;
+var scaleX = 1;
+var scaleY = 1;
 function drawScene() {
   resize(gl.canvas);
 
@@ -66,12 +78,34 @@ function drawScene() {
   // Set the view matrix
   var matrix = m3.projection(gl.canvas.clientWidth, gl.canvas.clientHeight);
   matrix = m3.translate(matrix, x, y);
-  matrix = m3.rotate(matrix, 0);
-  matrix = m3.scale(matrix, 1, 1);
+  matrix = m3.rotate(matrix, rotation);
+  matrix = m3.scale(matrix, scaleX, scaleY);
   gl.uniformMatrix3fv(matrixUniformLocation, false, matrix);
 
-  gl.drawArrays(primitiveType, 0, 3);
+  gl.drawArrays(primitiveType, 0, 6);
 }
+
+gl.canvas.onmousemove = (e) => {
+  var canvas_position = e.target.getBoundingClientRect();
+  x = e.clientX - canvas_position.left;
+  y = e.clientY - canvas_position.top;
+  drawScene();
+}
+
+gl.canvas.addEventListener("keydown", (e) => {
+  console.log(e.keyCode);
+  if (e.keyCode == 82) {
+    rotation -= 0.02;
+  } else if (e.keyCode == 66) {
+    scaleX += 0.04;
+    scaleY += 0.04;
+  } else if (e.keyCode == 83) {
+    scaleX -= 0.04;
+    scaleY -= 0.04;
+  }
+  drawScene();
+}, false);
+
 drawScene();
 
 }

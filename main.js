@@ -83,3 +83,20 @@ function setGeometry(gl, x1, y1, x2, y2, x3, y3) {
     gl.STATIC_DRAW
   );
 }
+
+function setColors(gl) {
+  // Fill the array with random colors.
+
+  var r = Math.random
+
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+        [ r(), r(), r(), 1,
+          r(), r(), r(), 1,
+          r(), r(), r(), 1,
+          r(), r(), r(), 1,
+          r(), r(), r(), 1,
+          r(), r(), r(), 1]),
+      gl.STATIC_DRAW);
+}
