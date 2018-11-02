@@ -19,8 +19,6 @@ fetch(PATH + "vs.glsl")
   });
 
 function main(vertexShaderSource, fragmentShaderSource, image) {
-console.log(NAME + ": ");
-console.log(fragmentShaderSource);
 const canvas = document.getElementById(NAME + "_canvas");
 const gl = canvas.getContext("webgl2");
 
@@ -189,7 +187,6 @@ gl.canvas.onmousemove = (e) => {
 }
 
 gl.canvas.addEventListener("keydown", (e) => {
-  console.log(e.keyCode);
   if (e.keyCode == 82) {
     rotation -= 0.02;
   } else if (e.keyCode == 66) {
