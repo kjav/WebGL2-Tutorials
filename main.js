@@ -138,293 +138,105 @@ function drawWithKernel(gl, kernel, kernelLocation, kernelWeight, kernelWeightLo
   gl.drawArrays(primitiveType, offset, count);
 }
 
-
 // Fill the current ARRAY_BUFFER buffer
-// with texture coordinates for the letter 'F'.
-function setTexcoords(gl) {
-  gl.bufferData(
-  gl.ARRAY_BUFFER,
-  new Float32Array([
-    // left column front
-    0, 0,
-    0, 1,
-    1, 0,
-    0, 1,
-    1, 1,
-    1, 0,
+// with the positions that define a cube.
+function setCubeGeometry(gl) {
+  var positions = new Float32Array(
+    [
+    -0.5, -0.5,  -0.5,
+    -0.5,  0.5,  -0.5,
+     0.5, -0.5,  -0.5,
+    -0.5,  0.5,  -0.5,
+     0.5,  0.5,  -0.5,
+     0.5, -0.5,  -0.5,
 
-    // top rung front
-    0, 0,
-    0, 1,
-    1, 0,
-    0, 1,
-    1, 1,
-    1, 0,
+    -0.5, -0.5,   0.5,
+     0.5, -0.5,   0.5,
+    -0.5,  0.5,   0.5,
+    -0.5,  0.5,   0.5,
+     0.5, -0.5,   0.5,
+     0.5,  0.5,   0.5,
 
-    // middle rung front
-    0, 0,
-    0, 1,
-    1, 0,
-    0, 1,
-    1, 1,
-    1, 0,
+    -0.5,   0.5, -0.5,
+    -0.5,   0.5,  0.5,
+     0.5,   0.5, -0.5,
+    -0.5,   0.5,  0.5,
+     0.5,   0.5,  0.5,
+     0.5,   0.5, -0.5,
 
-    // left column back
-    0, 0,
-    1, 0,
-    0, 1,
-    0, 1,
-    1, 0,
-    1, 1,
+    -0.5,  -0.5, -0.5,
+     0.5,  -0.5, -0.5,
+    -0.5,  -0.5,  0.5,
+    -0.5,  -0.5,  0.5,
+     0.5,  -0.5, -0.5,
+     0.5,  -0.5,  0.5,
 
-    // top rung back
-    0, 0,
-    1, 0,
-    0, 1,
-    0, 1,
-    1, 0,
-    1, 1,
+    -0.5,  -0.5, -0.5,
+    -0.5,  -0.5,  0.5,
+    -0.5,   0.5, -0.5,
+    -0.5,  -0.5,  0.5,
+    -0.5,   0.5,  0.5,
+    -0.5,   0.5, -0.5,
 
-    // middle rung back
-    0, 0,
-    1, 0,
-    0, 1,
-    0, 1,
-    1, 0,
-    1, 1,
+     0.5,  -0.5, -0.5,
+     0.5,   0.5, -0.5,
+     0.5,  -0.5,  0.5,
+     0.5,  -0.5,  0.5,
+     0.5,   0.5, -0.5,
+     0.5,   0.5,  0.5,
 
-    // top
-    0, 0,
-    1, 0,
-    1, 1,
-    0, 0,
-    1, 1,
-    0, 1,
-
-    // top rung right
-    0, 0,
-    1, 0,
-    1, 1,
-    0, 0,
-    1, 1,
-    0, 1,
-
-    // under top rung
-    0, 0,
-    0, 1,
-    1, 1,
-    0, 0,
-    1, 1,
-    1, 0,
-
-    // between top rung and middle
-    0, 0,
-    1, 1,
-    0, 1,
-    0, 0,
-    1, 0,
-    1, 1,
-
-    // top of middle rung
-    0, 0,
-    1, 1,
-    0, 1,
-    0, 0,
-    1, 0,
-    1, 1,
-
-    // right of middle rung
-    0, 0,
-    1, 1,
-    0, 1,
-    0, 0,
-    1, 0,
-    1, 1,
-
-    // bottom of middle rung.
-    0, 0,
-    0, 1,
-    1, 1,
-    0, 0,
-    1, 1,
-    1, 0,
-
-    // right of bottom
-    0, 0,
-    1, 1,
-    0, 1,
-    0, 0,
-    1, 0,
-    1, 1,
-
-    // bottom
-    0, 0,
-    0, 1,
-    1, 1,
-    0, 0,
-    1, 1,
-    1, 0,
-
-    // left side
-    0, 0,
-    0, 1,
-    1, 1,
-    0, 0,
-    1, 1,
-    1, 0,
-  ]),
-  gl.STATIC_DRAW);
+    ]);
+  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 }
 
-// Fill the current ARRAY_BUFFER buffer
-// with the values that define a letter 'F'.
-function setGeometry(gl) {
-  var positions = new Float32Array([
-          // left column front
-          0,   0,  0,
-          0, 150,  0,
-          30,   0,  0,
-          0, 150,  0,
-          30, 150,  0,
-          30,   0,  0,
+function setTexcoords(gl) {
+  gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array(
+        [
+        // select the bottom left image
+        0   , 0  ,
+        0   , 0.5,
+        0.25, 0  ,
+        0   , 0.5,
+        0.25, 0.5,
+        0.25, 0  ,
+        // select the bottom middle image
+        0.25, 0  ,
+        0.5 , 0  ,
+        0.25, 0.5,
+        0.25, 0.5,
+        0.5 , 0  ,
+        0.5 , 0.5,
+        // select to bottom right image
+        0.5 , 0  ,
+        0.5 , 0.5,
+        0.75, 0  ,
+        0.5 , 0.5,
+        0.75, 0.5,
+        0.75, 0  ,
+        // select the top left image
+        0   , 0.5,
+        0.25, 0.5,
+        0   , 1  ,
+        0   , 1  ,
+        0.25, 0.5,
+        0.25, 1  ,
+        // select the top middle image
+        0.25, 0.5,
+        0.25, 1  ,
+        0.5 , 0.5,
+        0.25, 1  ,
+        0.5 , 1  ,
+        0.5 , 0.5,
+        // select the top right image
+        0.5 , 0.5,
+        0.75, 0.5,
+        0.5 , 1  ,
+        0.5 , 1  ,
+        0.75, 0.5,
+        0.75, 1  ,
 
-          // top rung front
-          30,   0,  0,
-          30,  30,  0,
-          100,   0,  0,
-          30,  30,  0,
-          100,  30,  0,
-          100,   0,  0,
-
-          // middle rung front
-          30,  60,  0,
-          30,  90,  0,
-          67,  60,  0,
-          30,  90,  0,
-          67,  90,  0,
-          67,  60,  0,
-
-          // left column back
-            0,   0,  30,
-           30,   0,  30,
-            0, 150,  30,
-            0, 150,  30,
-           30,   0,  30,
-           30, 150,  30,
-
-          // top rung back
-           30,   0,  30,
-          100,   0,  30,
-           30,  30,  30,
-           30,  30,  30,
-          100,   0,  30,
-          100,  30,  30,
-
-          // middle rung back
-           30,  60,  30,
-           67,  60,  30,
-           30,  90,  30,
-           30,  90,  30,
-           67,  60,  30,
-           67,  90,  30,
-
-          // top
-            0,   0,   0,
-          100,   0,   0,
-          100,   0,  30,
-            0,   0,   0,
-          100,   0,  30,
-            0,   0,  30,
-
-          // top rung right
-          100,   0,   0,
-          100,  30,   0,
-          100,  30,  30,
-          100,   0,   0,
-          100,  30,  30,
-          100,   0,  30,
-
-          // under top rung
-          30,   30,   0,
-          30,   30,  30,
-          100,  30,  30,
-          30,   30,   0,
-          100,  30,  30,
-          100,  30,   0,
-
-          // between top rung and middle
-          30,   30,   0,
-          30,   60,  30,
-          30,   30,  30,
-          30,   30,   0,
-          30,   60,   0,
-          30,   60,  30,
-
-          // top of middle rung
-          30,   60,   0,
-          67,   60,  30,
-          30,   60,  30,
-          30,   60,   0,
-          67,   60,   0,
-          67,   60,  30,
-
-          // right of middle rung
-          67,   60,   0,
-          67,   90,  30,
-          67,   60,  30,
-          67,   60,   0,
-          67,   90,   0,
-          67,   90,  30,
-
-          // bottom of middle rung.
-          30,   90,   0,
-          30,   90,  30,
-          67,   90,  30,
-          30,   90,   0,
-          67,   90,  30,
-          67,   90,   0,
-
-          // right of bottom
-          30,   90,   0,
-          30,  150,  30,
-          30,   90,  30,
-          30,   90,   0,
-          30,  150,   0,
-          30,  150,  30,
-
-          // bottom
-          0,   150,   0,
-          0,   150,  30,
-          30,  150,  30,
-          0,   150,   0,
-          30,  150,  30,
-          30,  150,   0,
-
-          // left side
-          0,   0,   0,
-          0,   0,  30,
-          0, 150,  30,
-          0,   0,   0,
-          0, 150,  30,
-          0, 150,   0,
-  ]);
-
-  // Center the F around the origin and Flip it around. We do this because
-  // we're in 3D now with and +Y is up where as before when we started with 2D
-  // we had +Y as down.
-
-  // We could do by changing all the values above but I'm lazy.
-  // We could also do it with a matrix at draw time but you should
-  // never do stuff at draw time if you can do it at init time.
-  var matrix = m4.translate(m4.xRotation(Math.PI), -50, -75, -15);
-  //var matrix = m4.xRotate(m4.translation(-50, -75, -15), Math.PI);
-
-  for (var ii = 0; ii < positions.length; ii += 3) {
-    var vector = m4.transformPoint(matrix, [positions[ii + 0], positions[ii + 1], positions[ii + 2], 1]);
-    positions[ii + 0] = vector[0];
-    positions[ii + 1] = vector[1];
-    positions[ii + 2] = vector[2];
-  }
-
-  gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+      ]),
+      gl.STATIC_DRAW);
 }
